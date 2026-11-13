@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Pleos Vehicle SDK 읽기 권한. 실제로 쓰는 것만 선언한다. -->
+    <!-- 뒷문 열림 상태 -->
+    <uses-permission android:name="pleos.car.permission.CAR_DOORS" />
+
+</manifest>

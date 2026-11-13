@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 룸미러 모양: 가로로 긴 둥근 거울과 그 안의 작은 점(뒷좌석) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- 거울 지지대 -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M51,30h6v10h-6z" />
+    <!-- 거울 -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M34,40h40a8,8 0 0 1 8,8v12a8,8 0 0 1 -8,8h-40a8,8 0 0 1 -8,-8v-12a8,8 0 0 1 8,-8z" />
+    <!-- 거울 속 뒷좌석 동승자 -->
+    <path
+        android:fillColor="#FF1F6FEB"
+        android:pathData="M54,54m-6,0a6,6 0 1 1 12,0a6,6 0 1 1 -12,0" />
+</vector>
