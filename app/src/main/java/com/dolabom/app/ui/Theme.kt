@@ -19,20 +19,44 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.dolabom.app.core.Severity
 
+/**
+ * 돌아봄 색. 순수 블랙 바탕에 무채색 면과 1px 선만 쓰고, 색은 파랑 하나로 "지금 눌러야 할 것"만 가리킨다.
+ * 상태는 작은 점 하나(초록·호박·주황·빨강)로만 구분한다.
+ */
+internal object Ink {
+    val Background = Color(0xFF0A0A0B)
+    val Surface = Color(0xFF0F0F10)
+    val SurfaceRaised = Color(0xFF121214)
+    val SurfaceActive = Color(0xFF161618)
+    val Line = Color(0xFF1C1C1F)
+    val LineStrong = Color(0xFF2A2A2E)
+    val LineBright = Color(0xFF3A3A40)
+    val Text = Color(0xFFF2F2F3)
+    val TextSoft = Color(0xFFC9C9CE)
+    val TextMuted = Color(0xFF8A8A90)
+    val IconIdle = Color(0xFF6E6E75)
+    val Blue = Color(0xFF2E7CF6)
+    val Green = Color(0xFF37C86A)
+    val Amber = Color(0xFFF5B541)
+    val Orange = Color(0xFFF28C5B)
+    val Red = Color(0xFFF26B5B)
+}
+
 private val DolabomColors = darkColorScheme(
-    primary = Color(0xFF58A6FF),
-    onPrimary = Color(0xFF08131F),
-    secondary = Color(0xFF7EE0C3),
-    onSecondary = Color(0xFF08131F),
-    background = Color(0xFF10151C),
-    onBackground = Color(0xFFE6EDF3),
-    surface = Color(0xFF1A222D),
-    onSurface = Color(0xFFE6EDF3),
-    surfaceVariant = Color(0xFF243040),
-    onSurfaceVariant = Color(0xFFA7B3C2),
-    outline = Color(0xFF445266),
-    error = Color(0xFFFF6B63),
-    onError = Color(0xFF1F0A08),
+    primary = Ink.Blue,
+    onPrimary = Color.White,
+    secondary = Ink.Green,
+    onSecondary = Ink.Background,
+    background = Ink.Background,
+    onBackground = Ink.Text,
+    surface = Ink.Surface,
+    onSurface = Ink.Text,
+    surfaceVariant = Ink.SurfaceRaised,
+    onSurfaceVariant = Ink.TextMuted,
+    outline = Ink.Line,
+    outlineVariant = Ink.LineStrong,
+    error = Ink.Red,
+    onError = Color.White,
 )
 
 @Composable
@@ -42,10 +66,10 @@ fun DolabomTheme(content: @Composable () -> Unit) {
 
 /** 상태의 심각도를 색으로 나타낸다. 색만으로 구분하지 않도록 화면에는 항상 글자도 함께 쓴다. */
 internal fun severityColor(severity: Severity): Color = when (severity) {
-    Severity.INFO -> Color(0xFF7EE0C3)
-    Severity.NOTICE -> Color(0xFFF2CC60)
-    Severity.WARNING -> Color(0xFFFFA657)
-    Severity.EMERGENCY -> Color(0xFFFF6B63)
+    Severity.INFO -> Ink.Green
+    Severity.NOTICE -> Ink.Amber
+    Severity.WARNING -> Ink.Orange
+    Severity.EMERGENCY -> Ink.Red
 }
 
 /**
@@ -65,22 +89,22 @@ internal fun ScaledForCar(content: @Composable () -> Unit) {
 
 private const val CAR_BASE_WIDTH_DP = 1280f
 
-/** 내용을 묶는 둥근 판. */
+/** 내용을 묶는 둥근 판. 채우지 않고 1dp 선으로만 구분한다. */
 @Composable
 internal fun Panel(
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.surface,
-    border: BorderStroke? = null,
+    color: Color = Ink.Surface,
+    border: BorderStroke? = BorderStroke(1.dp, Ink.Line),
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(20.dp),
         color = color,
         border = border,
     ) {
         Column(
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier.padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             content = content,
         )

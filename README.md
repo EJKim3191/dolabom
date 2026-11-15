@@ -1,8 +1,17 @@
 # 돌아봄
 
+**뒤를 맡겨 주세요. 당신은 앞만 보고 갈 수 있도록.**
+
 운전 중 뒤를 돌아볼 수 없는 부모와 반려인을 대신해, 뒷좌석의 아이와 반려동물 상태를 보고 듣고 알려주는 AI 동승 케어 앱입니다.
 
 Pleos Connect(Android Automotive 기반) 차량용 앱이며, 현대자동차그룹 차량용 앱 개발 공모전 출품작입니다.
+
+## 문서
+
+- [기획서](docs/기획서.md): 서비스 개요, 차량용 앱과 핸드폰 앱(뒷좌석 카메라 + 가족 알림)의 역할과 연동, 화면 구성, 디자인.
+- [개발 계획](docs/개발계획.md): 메인 기능 요약, 1차 산출물 기준 개발 정도, 개발 방향, 2차까지 할 일과 일정.
+- [디자인 캔버스](https://claude.ai/artifact/VRnHniHt6CrhZH6USsF5CB): 차량 화면 4장, 핸드폰 화면 4장.
+- 시연 영상: [`docs/돌아봄_시연.mp4`](docs/돌아봄_시연.mp4). 지금 동작하는 차량 앱 화면과 2차에 만들 화면(디자인)을 40초 안에 보여 줍니다.
 
 ## 화면
 
@@ -80,11 +89,16 @@ https://nexus-playground.pleos.ai/repository/raw-releases/connect-avd/2.x/crp-ar
 
 - 확인함: `./gradlew assembleMockDebug` 성공. 코드 수정 없이 빌드됩니다.
 - 확인함: `./gradlew testMockDebugUnitTest`에서 `core` 패키지 단위 테스트 38개 통과 (AnnouncementPolicy 7, CareEngine 14, DemoScenarios 4, Korean 4, TripMonitor 9).
-- 확인함: `./gradlew assemblePleosRelease` 성공. Pleos Vehicle SDK `2.3.2`를 공식 저장소에서 받아 컴파일했습니다. 결과물이 `apk/돌아봄랩_돌아봄_release.apk`입니다.
+- 확인함: `./gradlew assemblePleosRelease` 성공. Pleos Vehicle SDK `2.3.2`를 공식 저장소에서 받아 컴파일했습니다. 결과물이 `apk/돌아봄랩_돌아봄_release.apk`이며, 디자인 반영 뒤 다시 빌드한 것입니다.
 - 확인함: `mock` 빌드를 휴대폰 에뮬레이터(Pixel 10 Pro XL, Android 17 / API 37, arm64, 1344 × 2992 px, 480 dpi, 세로)에 `./gradlew installMockDebug`로 설치해 실행했습니다. 동승자 선택 → "지켜보기 시작" → 주행 중 뒷좌석 상태 → 시연 패널 "멀미" → 알림 화면 → "들렀다 가자" → 경유지 요청 기록 → "주행 종료" → 반려동물 재선택까지 화면이 모두 떴고, 그동안 `adb logcat`에 앱 크래시(FATAL EXCEPTION)와 ANR이 없었습니다.
-- 휴대폰 세로 화면에서는 차량 가로 화면 기준으로 그린 일부 글자가 잘리거나 겹쳐 보입니다(예: 안전띠 값, 알림 화면의 제안 제목). 동작에는 영향이 없고, 기준 화면인 가로 1280dp 이상에서는 한 줄에 들어갑니다.
+- 확인함: 블랙 + 파랑 디자인을 반영한 뒤, 같은 에뮬레이터의 화면을 1280 × 720 · 160dpi(차량 화면 기준 배율)로 바꿔 동승자 선택 → 주행 중 → 멀미 알림 → 경유지 기록 → 하차 후 방치 3단계까지 다시 확인했습니다. 크래시 없음. 시연 영상의 "실제 화면" 장면이 이때 찍은 것입니다.
+- 휴대폰 세로 화면에서는 한 줄로 쌓인 배치로 바뀌며, 일부 요소가 작게 보입니다. 기준 화면은 가로 1280dp 이상입니다.
 - 아직 확인하지 않음: USB로 연결한 실제 휴대폰 설치, Pleos Connect 에뮬레이터(2560 × 1440)에서 `pleos` 빌드 실행과 뒷문 신호 수신. `pleos` 빌드는 컴파일과 APK 생성까지만 확인했습니다.
 - 뒷문 영역 이름은 `ROW_2_LEFT`, `ROW_2_RIGHT`로 가정했습니다. 에뮬레이터가 지원하지 않는 이름이면 건너뛰고 화면의 출처 줄에 실패 이유를 보여 줍니다.
+
+## 디자인
+
+블랙(#0A0A0B) 바탕에 무채색 면과 1dp 선만 쓰고, 색은 파랑(#2E7CF6) 하나로 "지금 눌러야 할 것"만 가리킵니다. 상태는 작은 점(편안 초록·알림 호박·경고 주황·긴급 빨강)과 글자로 구분합니다. 차량 화면은 왼쪽 세로 레일과 얇은 상단 바를 공통으로 씁니다. 값은 `ui/Theme.kt`의 `Ink`에 있고, 좌석 도식·상태 링·지도는 `ui/Widgets.kt`가 Canvas로 그립니다.
 
 ## 코드 구조
 
@@ -92,7 +106,7 @@ https://nexus-playground.pleos.ai/repository/raw-releases/connect-avd/2.x/crp-ar
 app/src/main/java/com/dolabom/app/
   core/   상태 판단, 음성 안내 시점, 방치 타이머. Android에 의존하지 않는 순수 Kotlin
   data/   차량 신호, 뒷좌석 인식, 내비게이션, 음성 안내의 인터페이스와 가짜 구현
-  ui/     화면 3개와 ViewModel (Jetpack Compose)
+  ui/     화면 3개와 ViewModel, 공통 크롬(Chrome.kt), 도식 위젯(Widgets.kt) (Jetpack Compose)
 app/src/mock/    가짜 차량 데이터만 쓰는 빌드
 app/src/pleos/   Pleos Vehicle SDK를 쓰는 빌드
 app/src/test/    core 단위 테스트

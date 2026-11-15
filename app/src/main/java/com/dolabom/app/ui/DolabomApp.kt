@@ -22,31 +22,32 @@ fun DolabomApp(viewModel: MainViewModel) {
                 color = MaterialTheme.colorScheme.background,
             ) {
                 Box(modifier = Modifier.fillMaxSize().safeDrawingPadding()) {
-                    when (state.screen) {
-                        Screen.SETUP -> SetupScreen(
-                            state = state,
-                            onSelectType = viewModel::selectRiderType,
-                            onNameChange = viewModel::setRiderName,
-                            onStart = viewModel::startTrip,
-                        )
+                    CarChrome(screen = state.screen, state = state, onToggleVoice = viewModel::toggleVoice) {
+                        when (state.screen) {
+                            Screen.SETUP -> SetupScreen(
+                                state = state,
+                                onSelectType = viewModel::selectRiderType,
+                                onNameChange = viewModel::setRiderName,
+                                onStart = viewModel::startTrip,
+                            )
 
-                        Screen.MONITOR -> MonitorScreen(
-                            state = state,
-                            onEndTrip = viewModel::endTrip,
-                            onScenario = viewModel::applyScenario,
-                            onAdjustTemp = viewModel::adjustCabinTemp,
-                            onToggleParked = viewModel::toggleParked,
-                            onToggleDriver = viewModel::toggleDriverPresent,
-                            onToggleRearDoor = viewModel::toggleRearDoor,
-                            onSkipMinute = viewModel::skipMinute,
-                            onToggleVoice = viewModel::toggleVoice,
-                        )
+                            Screen.MONITOR -> MonitorScreen(
+                                state = state,
+                                onEndTrip = viewModel::endTrip,
+                                onScenario = viewModel::applyScenario,
+                                onAdjustTemp = viewModel::adjustCabinTemp,
+                                onToggleParked = viewModel::toggleParked,
+                                onToggleDriver = viewModel::toggleDriverPresent,
+                                onToggleRearDoor = viewModel::toggleRearDoor,
+                                onSkipMinute = viewModel::skipMinute,
+                            )
 
-                        Screen.ALERT -> AlertScreen(
-                            state = state,
-                            onAccept = viewModel::acceptSuggestion,
-                            onDismiss = viewModel::dismissAlert,
-                        )
+                            Screen.ALERT -> AlertScreen(
+                                state = state,
+                                onAccept = viewModel::acceptSuggestion,
+                                onDismiss = viewModel::dismissAlert,
+                            )
+                        }
                     }
                 }
             }
