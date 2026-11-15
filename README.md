@@ -72,12 +72,18 @@ https://nexus-playground.pleos.ai/repository/raw-releases/connect-avd/2.x/crp-ar
 
 ## APK 위치
 
-제출용 release APK는 [`apk/`](apk/) 폴더에 `팀명_돌아봄_release.apk` 형식의 이름으로 올립니다.
+제출용 release APK는 [`apk/돌아봄랩_돌아봄_release.apk`](apk/돌아봄랩_돌아봄_release.apk)입니다. `./gradlew assemblePleosRelease`로 만든 `pleos` 빌드이며, 디버그 키로 서명되어 있습니다.
 
-## 검증 상태 (2026-11-14 기준)
+## 검증 상태 (2026-11-15 기준)
 
-- 확인함: 상태 판단, 음성 안내 시점, 방치 타이머, 시연 상황을 다루는 `core` 패키지 단위 테스트 38개 통과.
-- 아직 확인하지 않음: Android 빌드와 에뮬레이터 실행. Pleos Connect 에뮬레이터에서 `pleos` 빌드를 돌려 뒷문 신호가 들어오는지도 확인 전입니다.
+빌드 환경: JDK 17, Gradle 8.10.2, AGP 8.8.2, Android SDK Platform 35 / Build-Tools 35.0.0 (macOS, Apple Silicon).
+
+- 확인함: `./gradlew assembleMockDebug` 성공. 코드 수정 없이 빌드됩니다.
+- 확인함: `./gradlew testMockDebugUnitTest`에서 `core` 패키지 단위 테스트 38개 통과 (AnnouncementPolicy 7, CareEngine 14, DemoScenarios 4, Korean 4, TripMonitor 9).
+- 확인함: `./gradlew assemblePleosRelease` 성공. Pleos Vehicle SDK `2.3.2`를 공식 저장소에서 받아 컴파일했습니다. 결과물이 `apk/돌아봄랩_돌아봄_release.apk`입니다.
+- 확인함: `mock` 빌드를 휴대폰 에뮬레이터(Pixel 10 Pro XL, Android 17 / API 37, arm64, 1344 × 2992 px, 480 dpi, 세로)에 `./gradlew installMockDebug`로 설치해 실행했습니다. 동승자 선택 → "지켜보기 시작" → 주행 중 뒷좌석 상태 → 시연 패널 "멀미" → 알림 화면 → "들렀다 가자" → 경유지 요청 기록 → "주행 종료" → 반려동물 재선택까지 화면이 모두 떴고, 그동안 `adb logcat`에 앱 크래시(FATAL EXCEPTION)와 ANR이 없었습니다.
+- 휴대폰 세로 화면에서는 차량 가로 화면 기준으로 그린 일부 글자가 잘리거나 겹쳐 보입니다(예: 안전띠 값, 알림 화면의 제안 제목). 동작에는 영향이 없고, 기준 화면인 가로 1280dp 이상에서는 한 줄에 들어갑니다.
+- 아직 확인하지 않음: USB로 연결한 실제 휴대폰 설치, Pleos Connect 에뮬레이터(2560 × 1440)에서 `pleos` 빌드 실행과 뒷문 신호 수신. `pleos` 빌드는 컴파일과 APK 생성까지만 확인했습니다.
 - 뒷문 영역 이름은 `ROW_2_LEFT`, `ROW_2_RIGHT`로 가정했습니다. 에뮬레이터가 지원하지 않는 이름이면 건너뛰고 화면의 출처 줄에 실패 이유를 보여 줍니다.
 
 ## 코드 구조
